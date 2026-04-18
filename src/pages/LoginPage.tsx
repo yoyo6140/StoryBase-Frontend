@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { HouseTitleIcon } from '@/assets/icons';
-import bgLogin from '../assets/images/bg-login.jpg';
-import { Input } from '@/components/ui';
+import React from "react";
+import { HouseTitleIcon } from "@/assets/icons";
+import bgLogin from "../assets/images/bg-login.jpg";
+import { Input, Button } from "@/components/ui";
 
 const LoginPage: React.FC = () => {
   return (
@@ -25,9 +25,9 @@ const LoginPage: React.FC = () => {
               {/* 電子郵件 */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  使用者名稱
+                  名稱
                 </label>
-                <Input type="text" placeholder="使用者名稱" />
+                <Input type="text" placeholder="請輸入使用者名稱" />
               </div>
 
               {/* 密碼 */}
@@ -41,12 +41,9 @@ const LoginPage: React.FC = () => {
               </div>
 
               {/* 登入按鈕 */}
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 disabled:bg-indigo-400"
-              >
+              <Button variant="default" className="w-full">
                 登入
-              </button>
+              </Button>
             </form>
             {/* 註冊連結 */}
             <p className="mt-8 text-center text-sm text-slate-500">

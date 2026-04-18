@@ -4,23 +4,25 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default:
-          'bg-indigo-600 text-white shadow-md shadow-indigo-500/25 hover:bg-indigo-700',
+          'bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90',
         outline:
-          'border border-slate-200 bg-white/90 text-slate-800 hover:bg-slate-50',
-        ghost: 'text-slate-800 hover:bg-slate-100/80',
-        secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200',
-        link: 'text-indigo-600 underline-offset-4 hover:underline',
+          'border border-zinc-200 bg-white shadow-sm hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50',
+        ghost:
+          'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50',
+        secondary:
+          'bg-zinc-100 text-zinc-900 shadow-sm hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80',
+        link: 'text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50',
       },
       size: {
-        default: 'h-11 px-5 py-2',
-        sm: 'h-9 rounded-lg px-3 text-xs',
-        lg: 'h-12 rounded-xl px-6 text-base',
-        icon: 'size-10 rounded-xl p-0',
+        default: 'h-9 px-4 py-2',
+        sm: 'h-8 rounded-md px-3 text-xs',
+        lg: 'h-10 rounded-md px-8',
+        icon: 'size-9',
       },
     },
     defaultVariants: {
