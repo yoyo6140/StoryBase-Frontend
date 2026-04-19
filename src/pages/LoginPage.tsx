@@ -2,8 +2,10 @@ import React from "react";
 import { HouseTitleIcon } from "@/assets/icons";
 import bgLogin from "../assets/images/bg-login.jpg";
 import { Input, Button } from "@/components/ui";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen w-full">
       {/* 全螢幕背景圖 */}
@@ -21,7 +23,13 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="mx-auto w-full max-w-sm">
-            <form className="mt-8 space-y-5">
+            <form
+              className="mt-8 space-y-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate("/dashboard");
+              }}
+            >
               {/* 電子郵件 */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -40,8 +48,8 @@ const LoginPage: React.FC = () => {
                 <Input type="password" placeholder="請輸入密碼" />
               </div>
 
-              {/* 登入按鈕 */}
-              <Button variant="default" className="w-full">
+              {/* 登入按鈕：表單內 button 預設為 submit，改由 onSubmit 處理，避免瀏覽器 GET 提交在網址後加 ? */}
+              <Button type="submit" variant="default" className="w-full">
                 登入
               </Button>
             </form>

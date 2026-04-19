@@ -1,12 +1,23 @@
-import LoginPage from './pages/LoginPage'
+import { Navigate, Route, Routes } from 'react-router-dom';
+import AppLayout from './components/AppLayout';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import MemberPage from './pages/MemberPage';
+import PostsPage from './pages/PostsPage';
 
 function App() {
-
   return (
-    <>
-      <LoginPage />
-    </>
-  )
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<AppLayout />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/member" element={<MemberPage />} />
+        <Route path="/posts" element={<PostsPage />} />
+      </Route>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
