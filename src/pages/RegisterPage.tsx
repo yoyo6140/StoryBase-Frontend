@@ -1,14 +1,38 @@
 import { HouseTitleIcon } from "@/assets/icons";
 import bgLogin from "../assets/images/bg-login.jpg";
 import { Input, Button } from "@/components/ui";
-import { Link } from "react-router-dom";
-import { type FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { register } from "@/hooks/useAuth";
 
 function RegisterPage() {
-  // 註冊 API 暫停（useAuth 僅接 /api/v1/login）
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (username === "" || password === "") {
+      setError("請輸入使用者名稱和密碼");
+      return;
+    }
+    if (username.length < 3) {
+      setError("使用者名稱長度至少為3位");
+      return;
+    }
+    if (password.length < 6) {
+      setError("密碼長度至少為6位");
+      return;
+    }
+
+    try {
+      await register({ username, password, email });
+      navigate("/login");
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className="relative min-h-screen w-full">
@@ -25,13 +49,7 @@ function RegisterPage() {
             </div>
           </div>
           <div className="mx-auto w-full max-w-sm">
-            <form
-              className="mt-8 space-y-5"
-              onSubmit={(e: FormEvent) => {
-                e.preventDefault();
-                // 註冊：待接 /api/v1/register 後再寫入 useAuth
-              }}
-            >
+            <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">
                   使用者名稱
@@ -48,11 +66,12 @@ function RegisterPage() {
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">
-                  電子郵件（選填）
+                  電子郵件
                 </label>
                 <Input
                   type="email"
                   name="email"
+                  required
                   autoComplete="email"
                   placeholder="name@example.com"
                   value={email}
@@ -79,6 +98,11 @@ function RegisterPage() {
                 註冊
               </Button>
             </form>
+            {error ? (
+              <div className="text-sm text-red-600 mt-2" role="alert">
+                {error}
+              </div>
+            ) : null}
             <p className="mt-8 text-center text-sm text-slate-500">
               已有帳號？
               <Link

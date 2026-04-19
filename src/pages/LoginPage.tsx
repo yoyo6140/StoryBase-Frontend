@@ -75,19 +75,13 @@ function LoginPage() {
                   name="password"
                   autoComplete="current-password"
                   required
-                  minLength={6}
                   placeholder="請輸入密碼"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <Button
-                type="submit"
-                variant="default"
-                className="w-full"
-                onClick={handleSubmit}
-              >
+              <Button type="submit" variant="default" className="w-full">
                 送出
               </Button>
               {error ? (
