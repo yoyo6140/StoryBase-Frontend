@@ -11,7 +11,7 @@ function ErrorPage() {
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-2">
         <Button variant="default" asChild>
-          <Link to="/dashboard">前往儀表板</Link>
+          <Link to="/login">前往登入頁面</Link>
         </Button>
         <Button variant="outline" asChild>
           <Link to="/posts">貼文列表</Link>

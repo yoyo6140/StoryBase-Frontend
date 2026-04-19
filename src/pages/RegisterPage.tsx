@@ -1,37 +1,14 @@
 import { HouseTitleIcon } from "@/assets/icons";
 import bgLogin from "../assets/images/bg-login.jpg";
 import { Input, Button } from "@/components/ui";
-import { login } from "@/hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { type FormEvent, useState } from "react";
 
-function LoginPage() {
-  const navigate = useNavigate();
+function RegisterPage() {
+  // 註冊 API 暫停（useAuth 僅接 /api/v1/login）
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (username === "" || password === "") {
-      setError("請輸入使用者名稱和密碼");
-      return;
-    }
-    if (username.length < 3) {
-      setError("使用者名稱長度至少為3位");
-      return;
-    }
-    if (password.length < 6) {
-      setError("密碼長度至少為6位");
-      return;
-    }
-
-    try {
-      await login({ username, password });
-      navigate("/member");
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  const [email, setEmail] = useState("");
 
   return (
     <div className="relative min-h-screen w-full">
@@ -48,10 +25,16 @@ function LoginPage() {
             </div>
           </div>
           <div className="mx-auto w-full max-w-sm">
-            <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+            <form
+              className="mt-8 space-y-5"
+              onSubmit={(e: FormEvent) => {
+                e.preventDefault();
+                // 註冊：待接 /api/v1/register 後再寫入 useAuth
+              }}
+            >
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">
-                  名稱
+                  使用者名稱
                 </label>
                 <Input
                   type="text"
@@ -63,46 +46,46 @@ function LoginPage() {
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
-
               <div>
-                <div className="mb-1 flex justify-between">
-                  <label className="block text-sm font-medium text-slate-700">
-                    密碼
-                  </label>
-                </div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  電子郵件（選填）
+                </label>
+                <Input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  密碼
+                </label>
                 <Input
                   type="password"
                   name="password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
                   minLength={6}
-                  placeholder="請輸入密碼"
+                  placeholder="至少 6 個字元"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <Button
-                type="submit"
-                variant="default"
-                className="w-full"
-                onClick={handleSubmit}
-              >
-                送出
+              <Button type="submit" variant="default" className="w-full">
+                註冊
               </Button>
-              {error ? (
-                <p className="text-sm text-red-600" role="alert">
-                  {error}
-                </p>
-              ) : null}
             </form>
             <p className="mt-8 text-center text-sm text-slate-500">
-              還沒有帳號嗎？
+              已有帳號？
               <Link
-                to="/register"
+                to="/login"
                 className="ml-1 font-bold text-indigo-600 hover:underline"
               >
-                免費註冊
+                登入
               </Link>
             </p>
           </div>
@@ -112,4 +95,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

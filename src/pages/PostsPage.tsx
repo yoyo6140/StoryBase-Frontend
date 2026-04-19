@@ -53,13 +53,17 @@ function PostsPage() {
     <div className="mx-auto w-full max-w-2xl">
       <h1 className="text-xl font-bold text-zinc-900">貼文</h1>
       <p className="mt-1 text-sm text-zinc-500">
-        點選卡片可開啟全文。以下為示意資料。
+        點選卡片會依 id 開啟編輯頁並帶入該則資料。以下為示意資料。
       </p>
 
       <ul className="mt-6 list-none space-y-4 p-0">
         {SAMPLE_POSTS.map((post) => (
           <li key={post.id}>
-            <Link to={`/posts/${post.id}`} className={postListItemClass}>
+            <Link
+              to={`/posts/${post.id}/edit`}
+              className={postListItemClass}
+              aria-label={`編輯：${post.title}`}
+            >
               <article>
                 <h2 className="text-lg font-bold text-zinc-900">{post.title}</h2>
                 <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-600">
