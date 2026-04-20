@@ -29,7 +29,7 @@ export async function login(input: LoginInputData) {
   }
 
   // 成功則存入 session 並回傳
-  sessionStorage.setItem("auth_token", data.access_token);
+  sessionStorage.setItem("access_token", data.access_token);
   return data;
 }
 

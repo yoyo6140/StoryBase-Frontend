@@ -1,29 +1,38 @@
 import { Input, Button } from "@/components/ui";
 import { useState, useEffect } from "react";
-import { getMember } from "@/hooks/useMember";
-
-/** 新／確認密碼欄位至少字元數（搭配 HTML minLength） */
-const PASSWORD_MIN_LENGTH = 6;
+import { getMember, changePassword } from "@/hooks/useMember";
+import { Eye, EyeOff } from "lucide-react";
 
 function MemberPage() {
-  const access_token = sessionStorage.getItem("auth_token");
+  const access_token = sessionStorage.getItem("access_token");
   const [isEditing, setIsEditing] = useState(false);
-  const [formKey, setFormKey] = useState(0);
-  const [matchError, setMatchError] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  //打開編輯密碼視窗
   const openPasswordEditor = () => {
-    setMatchError("");
-    setFormKey((k) => k + 1);
+    setError("");
+    setShowOldPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
     setIsEditing(true);
   };
 
+  //關閉編輯密碼視窗
   const closePasswordEditor = () => {
-    setMatchError("");
+    setError("");
     setIsEditing(false);
   };
 
+  //取得會員資料
   useEffect(() => {
     if (access_token) {
       getMember({ access_token }).then((data) => {
@@ -32,6 +41,36 @@ function MemberPage() {
       });
     }
   }, [access_token]);
+
+  //修改密碼
+  function handleChangePassword(e: any) {
+    e.preventDefault();
+
+    if (!access_token) {
+      setError("請先登入");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("新密碼與確認新密碼須相同");
+      return;
+    }
+    changePassword({
+      access_token,
+      old_password: oldPassword,
+      new_password: newPassword,
+    })
+      .then(() => {
+        alert("修改成功");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        closePasswordEditor();
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  }
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
@@ -82,25 +121,7 @@ function MemberPage() {
             請輸入舊密碼與新密碼以完成更新。
           </p>
 
-          <form
-            key={formKey}
-            className="mt-6 space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              const newPwd = String(fd.get("newPassword") ?? "");
-              const confirmPwd = String(fd.get("confirmPassword") ?? "");
-
-              if (newPwd !== confirmPwd) {
-                setMatchError("新密碼與確認新密碼須相同");
-                return;
-              }
-
-              setMatchError("");
-              // 通過後可一併用 fd.get("oldPassword")、newPwd 送 API
-              closePasswordEditor();
-            }}
-          >
+          <form className="mt-6 space-y-4" onSubmit={handleChangePassword}>
             <div>
               <label
                 htmlFor="member-password-old"
@@ -108,15 +129,29 @@ function MemberPage() {
               >
                 舊密碼
               </label>
-              <Input
-                id="member-password-old"
-                name="oldPassword"
-                type="password"
-                required
-                minLength={PASSWORD_MIN_LENGTH}
-                autoComplete="current-password"
-                placeholder={`至少 ${PASSWORD_MIN_LENGTH} 個字元`}
-              />
+              <div className="relative">
+                <Input
+                  id="member-password-old"
+                  type={showOldPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  className="pr-10"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+                  onClick={() => setShowOldPassword((v) => !v)}
+                  aria-label={showOldPassword ? "隱藏舊密碼" : "顯示舊密碼"}
+                >
+                  {showOldPassword ? (
+                    <EyeOff className="size-4 cursor-pointer" aria-hidden />
+                  ) : (
+                    <Eye className="size-4 cursor-pointer" aria-hidden />
+                  )}
+                </button>
+              </div>
             </div>
             <div>
               <label
@@ -125,15 +160,29 @@ function MemberPage() {
               >
                 新密碼
               </label>
-              <Input
-                id="member-password-new"
-                name="newPassword"
-                type="password"
-                required
-                minLength={PASSWORD_MIN_LENGTH}
-                autoComplete="new-password"
-                placeholder={`至少 ${PASSWORD_MIN_LENGTH} 個字元`}
-              />
+              <div className="relative">
+                <Input
+                  id="member-password-new"
+                  type={showNewPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  className="pr-10"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+                  onClick={() => setShowNewPassword((v) => !v)}
+                  aria-label={showNewPassword ? "隱藏新密碼" : "顯示新密碼"}
+                >
+                  {showNewPassword ? (
+                    <EyeOff className="size-4 cursor-pointer" aria-hidden />
+                  ) : (
+                    <Eye className="size-4 cursor-pointer" aria-hidden />
+                  )}
+                </button>
+              </div>
             </div>
             <div>
               <label
@@ -142,20 +191,36 @@ function MemberPage() {
               >
                 確認新密碼
               </label>
-              <Input
-                id="member-password-confirm"
-                name="confirmPassword"
-                type="password"
-                required
-                minLength={PASSWORD_MIN_LENGTH}
-                autoComplete="new-password"
-                placeholder={`至少 ${PASSWORD_MIN_LENGTH} 個字元`}
-              />
+              <div className="relative">
+                <Input
+                  id="member-password-confirm"
+                  type={showConfirmPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  className="pr-10"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  aria-label={
+                    showConfirmPassword ? "隱藏確認密碼" : "顯示確認密碼"
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="size-4 cursor-pointer" aria-hidden />
+                  ) : (
+                    <Eye className="size-4 cursor-pointer" aria-hidden />
+                  )}
+                </button>
+              </div>
             </div>
 
-            {matchError ? (
+            {error ? (
               <p className="text-sm text-red-600" role="alert">
-                {matchError}
+                {error}
               </p>
             ) : null}
 
