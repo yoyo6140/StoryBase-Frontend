@@ -87,15 +87,10 @@ npm run build -- --base=/<專案資料夾名稱>/
 
 ### SPA 路由（History API）
 
-- **Netlify**：在 `public/` 新增 `_redirects`，內容一行：  
-  `/*    /index.html   200`
-- **Vercel**：新增 `vercel.json`（可選，若預設已有 fallback 可略）：
+未設定 fallback 時，在子路徑（例如 `/member`）**重新整理**容易出現 **`404: NOT_FOUND`（Vercel）**。
 
-```json
-{
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}
-```
+- **Vercel**：專案根目錄已含 **`vercel.json`**，會將未命中靜態檔的請求導向 **`index.html`**。推送後在 Vercel 後台 **Redeploy** 一次即可生效。
+- **Netlify**：`public/_redirects` 已內建上述規則，建置後會出現在 `dist/` 根目錄。
 
 ---
 
