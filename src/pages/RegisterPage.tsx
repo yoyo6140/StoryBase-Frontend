@@ -41,8 +41,8 @@ function RegisterPage() {
         style={{ backgroundImage: `url(${bgLogin})` }}
         aria-hidden
       />
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-start px-4 py-10 sm:px-6 sm:pt-14 md:pt-20">
-        <div className="w-full max-w-md translate-x-[270px] rounded-2xl border border-white/50 bg-white/90 p-8 shadow-2xl backdrop-blur-md sm:p-10">
+      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-start px-4 py-8 sm:px-6 sm:py-10 sm:pt-12">
+        <div className="w-full max-w-md translate-x-0 rounded-2xl border border-white/50 bg-white/90 p-6 shadow-2xl backdrop-blur-md sm:translate-x-8 sm:p-8 md:translate-x-16 md:p-10 lg:translate-x-[min(16vw,200px)]">
           <div className="flex justify-center">
             <div className="w-full max-w-[min(100%,280px)]">
               <HouseTitleIcon className="h-auto w-full object-contain" />

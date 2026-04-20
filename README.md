@@ -1,24 +1,33 @@
 # StoryBase Frontend
 
-貼文小站的前端：以 **React 19**、**Vite 8**、**TypeScript**、**Tailwind CSS 4** 與 **React Router** 建置，串接後端 REST API（註冊／登入等）。
+貼文小站前端：**React 19**、**Vite 8**、**TypeScript**、**Tailwind CSS 4**、**React Router 7**，以 REST API 串接後端（註冊／登入／會員／貼文）。
+
+## 技術棧
+
+| 類別 | 套件 |
+|------|------|
+| 框架 | React 19、react-router-dom 7 |
+| 建置 | Vite 8、TypeScript |
+| 樣式 | Tailwind CSS 4 |
+| UI | Radix Slot、CVA、lucide-react |
 
 ## 環境需求
 
-- [Node.js](https://nodejs.org/)（建議 LTS）
-- npm（或相容的套件管理工具）
+- [Node.js](https://nodejs.org/)（建議 **20／22 LTS**）
+- **npm**（或相容的套件管理工具）
 
-## 安裝與啟動
+## 快速開始
 
 ```bash
-git clone <此儲存庫網址>
+git clone <儲存庫網址>
 cd StoryBase-Frontend
 npm install
 ```
 
-在專案根目錄建立 **`.env`**（勿將含正式網址／金鑰的檔案提交至公開儲存庫）：
+在專案根目錄新增 **`.env`**（勿將含正式環境網址的檔案提交到公開儲存庫）：
 
 ```env
-# 後端根網址，不要加結尾斜線；前端會組成「此網址 + /api/v1/...」
+# 後端根網址，不要結尾斜線；請求會組成「此網址 + /api/v1/...」
 VITE_API_BASE_URL=https://your-backend.example.com
 ```
 
@@ -28,48 +37,63 @@ VITE_API_BASE_URL=https://your-backend.example.com
 npm run dev
 ```
 
-瀏覽器開啟終端機顯示的本機網址（預設多為 `http://localhost:5173`）。
+預設為 **http://localhost:3000**（見 `vite.config.ts`）。開發時 `/api` 會 proxy 到本機後端（預設 `http://127.0.0.1:8080`）。
 
-## 可用指令
+## 指令
 
-| 指令            | 說明                 |
-| --------------- | -------------------- |
-| `npm run dev`   | 開發模式（熱重載）   |
-| `npm run build` | TypeScript 檢查並建置正式版 |
-| `npm run preview` | 在本機預覽建置結果 |
-| `npm run lint`  | 執行 ESLint          |
-| `npm run format` | 以 Prettier 格式化 `src` 等路徑 |
+| 指令 | 說明 |
+|------|------|
+| `npm run dev` | 開發模式（熱重載） |
+| `npm run build` | `tsc -b` 後 `vite build` 產出 `dist/` |
+| `npm run preview` | 本機預覽建置結果 |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier（`src` 等路徑） |
 
-## 專案結構（精簡）
-
-- `src/pages/` — 各頁面（登入、註冊、會員、貼文列表／詳情／編輯、錯誤頁）
-- `src/components/` — 版面與 UI 元件
-- `src/hooks/useAuth.ts` — 登入／註冊 API 與 `localStorage` 存 token
-- `src/data/samplePosts.ts` — 貼文列表／詳情目前使用的範例資料（可改為呼叫後端）
-
-路徑別名：`@/` 對應 `src/`（見 `vite.config.ts`）。
-
-## 路由一覽
+## 路由
 
 | 路徑 | 說明 |
-| ---- | ---- |
+|------|------|
 | `/` | 導向 `/login` |
-| `/login` | 登入 |
+| `/login` | 登入（若已有 `access_token` 會導向 `/member`） |
 | `/register` | 註冊 |
-| `/member` | 會員資料（需通過版面路由；實際保護邏輯可依需求加上） |
-| `/posts` | 貼文列表 |
-| `/posts/:postId` | 貼文詳情 |
-| `/posts/:postId/edit` | 編輯貼文 |
-| `*` | 未定義路徑：版面內為錯誤頁，版面外導向登入 |
+| `/homepage` | 首頁：公開貼文列表 |
+| `/homepage/:postId` | 首頁貼文全文（公開） |
+| `/member` | 會員資料（**需登入**） |
+| `/posts` | 我的貼文列表（**需登入**） |
+| `/posts/add` | 新增貼文（**需登入**） |
+| `/posts/:postId/edit` | 編輯貼文（**需登入**） |
+| `*`（在 `AppLayout` 內） | 404 錯誤頁 |
+| 其餘未定義路徑 | 導向 `/login` |
+
+**需登入**的路由由 `RequireAuth` 保護：無 `localStorage.access_token` 時會導向 `/login`。
+
+## 專案結構
+
+```
+src/
+├── pages/           # 各頁面
+├── components/      # TopBar、AppLayout、RequireAuth、UI 等
+├── hooks/           # useAuth、usePosts、useMember
+├── assets/          # 圖片、SVG
+├── lib/             # 工具函式
+├── App.tsx          # 路由定義
+└── main.tsx
+```
+
+路徑別名 **`@/`** 對應 **`src/`**（`vite.config.ts`）。
 
 ## 與後端整合
 
-- **登入**：`POST {VITE_API_BASE_URL}/api/v1/login`  
-  成功時將 `access_token` 寫入 `localStorage`（鍵名：`access_token`）。
+- **登入**：`POST {VITE_API_BASE_URL}/api/v1/login` — 成功後將 `access_token` 寫入 `localStorage`（鍵名：`access_token`）。
 - **註冊**：`POST {VITE_API_BASE_URL}/api/v1/register`
+- 貼文／會員等其餘端點見 `src/hooks/usePosts.ts`、`useMember.ts`。
 
-錯誤回應若為 JSON 且含 `detail`（例如 FastAPI），會當作錯誤訊息顯示於表單。
+若錯誤回應為 JSON 且含 `detail`（例如 FastAPI），前端會盡量顯示為表單錯誤訊息。
+
+## 建置與部署
+
+詳見 **[docs/DEPLOY.md](docs/DEPLOY.md)**（GitHub Actions、GitHub Pages、Vercel／Netlify、環境變數）。
 
 ## 授權
 
-若未於儲存庫中註明，預設以專案擁有者為準。
+若儲存庫未另註明，以專案擁有者為準。
