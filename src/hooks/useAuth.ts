@@ -28,8 +28,8 @@ export async function login(input: LoginInputData) {
     throw new Error(data.detail || data.message || "登入失敗");
   }
 
-  // 成功則存入 session 並回傳
-  sessionStorage.setItem("access_token", data.access_token);
+  // 成功則存入 localStorage 並回傳
+  localStorage.setItem("access_token", data.access_token);
   return data;
 }
 

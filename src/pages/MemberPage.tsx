@@ -4,7 +4,7 @@ import { getMember, changePassword } from "@/hooks/useMember";
 import { Eye, EyeOff } from "lucide-react";
 
 function MemberPage() {
-  const access_token = sessionStorage.getItem("access_token");
+  const access_token = localStorage.getItem("access_token");
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
