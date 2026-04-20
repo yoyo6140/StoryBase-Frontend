@@ -11,15 +11,21 @@
   --card-bg-hover: rgb(250 250 250);
 }
 
-/* 通用卡片：外觀來自 --card-*，版面（上距、最大寬度）一併定義在此 */
+/* 通用卡片：外觀來自 --card-*；小螢幕略縮上距，sm 起與原本一致 */
 .card-surface {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   background: var(--card-bg);
   padding: var(--card-padding);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   border: var(--card-border);
   transition: background-color 200ms ease;
+}
+
+@media (min-width: 640px) {
+  .card-surface {
+    margin-top: 1rem;
+  }
 }
 
 .card-surface:hover {

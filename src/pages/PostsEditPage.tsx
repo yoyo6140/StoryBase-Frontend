@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const textareaClass =
-  "min-h-[140px] w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus-visible:border-zinc-950 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50";
+  "min-h-[120px] w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus-visible:border-zinc-950 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-[140px]";
 
 function PostsEditPage() {
   const { postId } = useParams();
@@ -178,7 +178,9 @@ function PostsEditPage() {
       <div className="card-surface p-5 sm:p-8">
         {isEditing ? (
           <>
-            <h1 className="text-xl font-bold text-zinc-900">編輯貼文</h1>
+            <h1 className="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
+              編輯貼文
+            </h1>
             <form
               className="mt-6 space-y-5"
               onSubmit={(e) => {
@@ -234,12 +236,18 @@ function PostsEditPage() {
                 <Button
                   type="button"
                   variant="outline"
+                  className="w-full sm:w-auto"
                   onClick={exitEditMode}
                   disabled={submitting}
                 >
                   取消
                 </Button>
-                <Button type="submit" variant="default" disabled={submitting}>
+                <Button
+                  type="submit"
+                  variant="default"
+                  className="w-full sm:w-auto"
+                  disabled={submitting}
+                >
                   {submitting ? "儲存中…" : "儲存"}
                 </Button>
               </div>
@@ -264,11 +272,12 @@ function PostsEditPage() {
       </div>
       {!isEditing ? (
         <div className="mt-4 space-y-2">
-          <div className="flex flex-wrap justify-end gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
             <Button
               type="button"
               variant="outline"
               size="sm"
+              className="w-full sm:w-auto"
               onClick={() => {
                 setDeleteError("");
                 setIsEditing(true);
@@ -281,7 +290,7 @@ function PostsEditPage() {
               type="button"
               variant="outline"
               size="sm"
-              className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+              className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 sm:w-auto"
               onClick={() => void handleDelete()}
               disabled={deleting}
             >
@@ -289,7 +298,10 @@ function PostsEditPage() {
             </Button>
           </div>
           {deleteError ? (
-            <p className="text-right text-sm text-red-600" role="alert">
+            <p
+              className="text-sm text-red-600 sm:text-right"
+              role="alert"
+            >
               {deleteError}
             </p>
           ) : null}

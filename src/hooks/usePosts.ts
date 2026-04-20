@@ -17,6 +17,28 @@ export interface PostAdd {
   content: string;
 }
 
+/** 全部貼文（GET /api/v1/posts，公開列表） */
+export async function getPosts() {
+  try {
+    const res = await fetch(`${API_BASE}${POSTS_PATH}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data: unknown = await res.json();
+
+    if (!res.ok) {
+      throw new Error("無法取得貼文列表");
+    }
+
+    return data;
+  } catch {
+    throw new Error("無法取得貼文列表");
+  }
+}
+
 /** 目前使用者的文章（需 Bearer access_token） */
 export async function getMyPosts(access_token: string) {
   try {

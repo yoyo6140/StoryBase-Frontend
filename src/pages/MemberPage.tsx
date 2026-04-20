@@ -1,3 +1,4 @@
+import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { Input, Button } from "@/components/ui";
 import { useState, useEffect } from "react";
 import { getMember, changePassword } from "@/hooks/useMember";
@@ -16,6 +17,7 @@ function MemberPage() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   //打開編輯密碼視窗
   const openPasswordEditor = () => {
@@ -34,12 +36,30 @@ function MemberPage() {
 
   //取得會員資料
   useEffect(() => {
-    if (access_token) {
-      getMember({ access_token }).then((data) => {
-        setUsername(data.username);
-        setEmail(data.email);
-      });
+    let cancelled = false;
+    setProfileLoading(true);
+    if (!access_token) {
+      setProfileLoading(false);
+      return () => {
+        cancelled = true;
+      };
     }
+    getMember({ access_token })
+      .then((data) => {
+        if (!cancelled) {
+          setUsername(data.username);
+          setEmail(data.email);
+        }
+      })
+      .catch(() => {
+        /* 錯誤時維持空白，由 RequireAuth／後續操作處理 */
+      })
+      .finally(() => {
+        if (!cancelled) setProfileLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [access_token]);
 
   //修改密碼
@@ -72,12 +92,24 @@ function MemberPage() {
       });
   }
 
+  if (profileLoading) {
+    return (
+      <div className="mx-auto w-full max-w-2xl">
+        <LoadingIndicator />
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-      <div className="card-surface w-full p-6 sm:p-8">
+      <div className="card-surface w-full p-5 sm:p-8">
         <header>
-          <h1 className="text-xl font-bold text-zinc-900">會員資料</h1>
-          <p className="mt-1 text-sm text-zinc-500">檢視並更新您的帳號資訊</p>
+          <h1 className="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
+            會員資料
+          </h1>
+          <p className="mt-1 text-xs text-zinc-500 sm:text-sm">
+            檢視並更新您的帳號資訊
+          </p>
         </header>
 
         <div className="mt-6 space-y-5">
@@ -88,7 +120,12 @@ function MemberPage() {
             >
               使用者名稱
             </label>
-            <div id="member-username">{username}</div>
+            <div
+              id="member-username"
+              className="break-words text-sm text-zinc-900 sm:text-base"
+            >
+              {username}
+            </div>
           </div>
           <div>
             <label
@@ -97,15 +134,21 @@ function MemberPage() {
             >
               電子郵件
             </label>
-            <div id="member-email">{email}</div>
+            <div
+              id="member-email"
+              className="break-words text-sm text-zinc-900 sm:text-base"
+            >
+              {email}
+            </div>
           </div>
         </div>
 
         {!isEditing && (
-          <div className="mt-6 flex items-center justify-end gap-2">
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
             <Button
               type="button"
               variant="outline"
+              className="w-full sm:w-auto"
               onClick={openPasswordEditor}
             >
               修改密碼
@@ -115,9 +158,11 @@ function MemberPage() {
       </div>
 
       {isEditing && (
-        <div className="card-surface w-full p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-zinc-900">變更密碼</h2>
-          <p className="mt-1 text-sm text-zinc-500">
+        <div className="card-surface w-full p-5 sm:p-8">
+          <h2 className="text-base font-bold tracking-tight text-zinc-900 sm:text-lg">
+            變更密碼
+          </h2>
+          <p className="mt-1 text-xs text-zinc-500 sm:text-sm">
             請輸入舊密碼與新密碼以完成更新。
           </p>
 
@@ -228,11 +273,16 @@ function MemberPage() {
               <Button
                 type="button"
                 variant="outline"
+                className="w-full sm:w-auto"
                 onClick={closePasswordEditor}
               >
                 取消
               </Button>
-              <Button type="submit" variant="default">
+              <Button
+                type="submit"
+                variant="default"
+                className="w-full sm:w-auto"
+              >
                 確認
               </Button>
             </div>
