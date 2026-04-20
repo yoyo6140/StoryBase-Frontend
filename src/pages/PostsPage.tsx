@@ -12,9 +12,9 @@ function PostsPage() {
 
   useEffect(() => {
     if (access_token) {
-      getMyPosts(access_token).then((data) => {
-        setPosts(data as MyPost[]);
-      });
+      getMyPosts(access_token)
+        .then(setPosts)
+        .catch(() => setPosts([]));
     } else {
       setPosts([]);
     }
@@ -38,8 +38,10 @@ function PostsPage() {
         <ul className="mt-6 list-none space-y-4 p-0">
           {posts.map((post) => (
             <li key={post.id}>
+              {/* state：把整筆 post 傳給下一頁，編輯頁可先顯示再向 API 確認 */}
               <Link
                 to={`/posts/${post.id}/edit`}
+                state={{ post }}
                 className={postListItemClass}
                 aria-label={`編輯：${post.title}`}
               >

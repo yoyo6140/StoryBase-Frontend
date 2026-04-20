@@ -1,40 +1,27 @@
 import { Button, Input } from "@/components/ui";
-import { SAMPLE_POSTS } from "@/data/samplePosts";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
-import { type FormEvent, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const textareaClass =
   "min-h-[140px] w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus-visible:border-zinc-950 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50";
 
 function PostsEditPage() {
   const { postId } = useParams();
-  const navigate = useNavigate();
-  const post = postId ? SAMPLE_POSTS.find((p) => p.id === postId) : undefined;
+  const location = useLocation();
+  const post = location.state?.post;
 
-  const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(post?.title ?? "");
   const [content, setContent] = useState(post?.content ?? "");
 
-  useEffect(() => {
-    const p = postId ? SAMPLE_POSTS.find((x) => x.id === postId) : undefined;
-    if (p) {
-      setTitle(p.title);
-      setContent(p.content);
-    }
-  }, [postId]);
+  const [isEditing, setIsEditing] = useState(false);
 
-  if (!postId || !post) {
-    return (
-      <div className="mx-auto w-full max-w-2xl">
-        <p className="text-sm text-zinc-600">找不到要編輯的貼文。</p>
-        <Button variant="outline" className="mt-4" asChild>
-          <Link to="/posts">返回貼文列表</Link>
-        </Button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    setTitle(post.title);
+    setContent(post.content);
+  }, [post]);
 
   const exitEditMode = () => {
     setTitle(post.title);
@@ -42,9 +29,8 @@ function PostsEditPage() {
     setIsEditing(false);
   };
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    navigate("/posts", { replace: true });
+  const onSubmit = () => {
+    console.log("送出成功");
   };
 
   return (
