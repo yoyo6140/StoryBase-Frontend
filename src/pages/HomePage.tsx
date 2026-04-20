@@ -2,6 +2,7 @@ import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { getPosts, type MyPost } from "@/hooks/usePosts";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import homePageBg from "../assets/images/homePage-bg.jpg";
 
 const postListItemClass =
   "card-surface block p-5 sm:p-6 no-underline transition-[box-shadow,border-color,background-color] duration-200 hover:bg-zinc-50 hover:shadow-lg hover:border-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2";
@@ -39,7 +40,13 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div className="relative min-h-screen w-full">
+      <div
+        className="pointer-events-none absolute inset-0 bg-repeat bg-white"
+        style={{ backgroundImage: `url(${homePageBg})` }}
+        aria-hidden
+      />
+      <div className="relative z-10 mx-auto w-full max-w-2xl">
       <h1 className="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
         首頁
       </h1>
@@ -85,6 +92,7 @@ function HomePage() {
           ))}
         </ul>
       ) : null}
+      </div>
     </div>
   );
 }

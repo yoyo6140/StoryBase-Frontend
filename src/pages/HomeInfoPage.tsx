@@ -4,6 +4,7 @@ import { getPosts, type MyPost } from "@/hooks/usePosts";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import homePageBg from "../assets/images/homePage-bg.jpg";
 
 function HomeInfoPage() {
   const { postId } = useParams();
@@ -64,68 +65,96 @@ function HomeInfoPage() {
 
   if (!postId) {
     return (
-      <div className="mx-auto w-full max-w-2xl">
-        <p className="text-sm text-zinc-600">缺少文章 id。</p>
-        <Button variant="outline" className="mt-4" asChild>
-          <Link to="/homepage">返回首頁</Link>
-        </Button>
+      <div className="relative min-h-screen w-full">
+        <div
+          className="pointer-events-none absolute inset-0 bg-repeat bg-white"
+          style={{ backgroundImage: `url(${homePageBg})` }}
+          aria-hidden
+        />
+        <div className="relative z-10 mx-auto w-full max-w-2xl">
+          <p className="text-sm text-zinc-600">缺少文章 id。</p>
+          <Button variant="outline" className="mt-4" asChild>
+            <Link to="/homepage">返回首頁</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (loadError) {
     return (
-      <div className="mx-auto w-full max-w-2xl">
-        <Button variant="ghost" size="sm" className="-ml-2 mb-4 gap-1" asChild>
-          <Link to="/homepage">
-            <ArrowLeft className="size-4" aria-hidden />
-            返回首頁
-          </Link>
-        </Button>
-        <p className="text-sm text-zinc-600">{loadError}</p>
+      <div className="relative min-h-screen w-full">
+        <div
+          className="pointer-events-none absolute inset-0 bg-repeat bg-white"
+          style={{ backgroundImage: `url(${homePageBg})` }}
+          aria-hidden
+        />
+        <div className="relative z-10 mx-auto w-full max-w-2xl">
+          <Button variant="ghost" size="sm" className="-ml-2 mb-4 gap-1" asChild>
+            <Link to="/homepage">
+              <ArrowLeft className="size-4" aria-hidden />
+              返回首頁
+            </Link>
+          </Button>
+          <p className="text-sm text-zinc-600">{loadError}</p>
+        </div>
       </div>
     );
   }
 
   if (loading || !post) {
     return (
-      <div className="mx-auto w-full max-w-2xl">
-        <Button variant="ghost" size="sm" className="-ml-2 mb-2 gap-1" asChild>
-          <Link to="/homepage">
-            <ArrowLeft className="size-4" aria-hidden />
-            返回
-          </Link>
-        </Button>
-        <LoadingIndicator />
+      <div className="relative min-h-screen w-full">
+        <div
+          className="pointer-events-none absolute inset-0 bg-repeat bg-white"
+          style={{ backgroundImage: `url(${homePageBg})` }}
+          aria-hidden
+        />
+        <div className="relative z-10 mx-auto w-full max-w-2xl">
+          <Button variant="ghost" size="sm" className="-ml-2 mb-2 gap-1" asChild>
+            <Link to="/homepage">
+              <ArrowLeft className="size-4" aria-hidden />
+              返回
+            </Link>
+          </Button>
+          <LoadingIndicator />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl">
-      <div className="mb-4">
-        <Button variant="ghost" size="sm" className="-ml-2 gap-1" asChild>
-          <Link to="/homepage">
-            <ArrowLeft className="size-4" aria-hidden />
-            返回首頁
-          </Link>
-        </Button>
-      </div>
-
-      <article className="card-surface p-5 sm:p-8">
-        <p className="text-xs font-medium text-zinc-500 sm:text-sm">
-          作者：{post.author?.username ?? "—"}
-        </p>
-        <h1 className="mt-2 break-words text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
-          {post.title}
-        </h1>
-        <div className="mt-6 border-t border-zinc-100 pt-6">
-          <h2 className="text-sm font-medium text-zinc-500">內容</h2>
-          <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed text-zinc-700 sm:text-base">
-            {post.content}
-          </p>
+    <div className="relative min-h-screen w-full">
+      <div
+        className="pointer-events-none absolute inset-0 bg-repeat bg-white"
+        style={{ backgroundImage: `url(${homePageBg})` }}
+        aria-hidden
+      />
+      <div className="relative z-10 mx-auto w-full max-w-2xl">
+        <div className="mb-4">
+          <Button variant="ghost" size="sm" className="-ml-2 gap-1" asChild>
+            <Link to="/homepage">
+              <ArrowLeft className="size-4" aria-hidden />
+              返回首頁
+            </Link>
+          </Button>
         </div>
-      </article>
+
+        <article className="card-surface p-5 sm:p-8">
+          <p className="text-xs font-medium text-zinc-500 sm:text-sm">
+            作者：{post.author?.username ?? "—"}
+          </p>
+          <h1 className="mt-2 break-words text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
+            {post.title}
+          </h1>
+          <div className="mt-6 border-t border-zinc-100 pt-6">
+            <h2 className="text-sm font-medium text-zinc-500">內容</h2>
+            <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed text-zinc-700 sm:text-base">
+              {post.content}
+            </p>
+          </div>
+        </article>
+      </div>
     </div>
   );
 }
