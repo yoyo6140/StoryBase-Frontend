@@ -17,6 +17,7 @@ function TopBar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const isHomePage = location.pathname === "/homepage";
+  const isLoggedIn = Boolean(localStorage.getItem("access_token"));
 
   useEffect(() => {
     setMenuOpen(false);
@@ -39,8 +40,14 @@ function TopBar() {
           <HouseTitleIcon className="h-7 w-auto max-w-[min(100%,9rem)] sm:h-8 sm:max-w-[200px]" />
         </Link>
 
-        {!isHomePage ? (
-          <nav className="hidden flex-1 items-end gap-0.5 sm:flex sm:gap-1">
+        {isLoggedIn ? (
+          <nav
+            className={
+              isHomePage
+                ? "hidden flex-1 items-center gap-0.5 sm:flex sm:gap-1"
+                : "hidden flex-1 items-end gap-0.5 sm:flex sm:gap-1"
+            }
+          >
             <Link to="/member" className={navLinkClass}>
               會員
             </Link>
@@ -51,9 +58,19 @@ function TopBar() {
         ) : null}
 
         {isHomePage ? (
-          <Link to="/login" className={navLinkClass}>
-            登入
-          </Link>
+          isLoggedIn ? (
+            <Link
+              to="/login"
+              className={mobileNavLinkClass}
+              onClick={clearAccessToken}
+            >
+              登出
+            </Link>
+          ) : (
+            <Link to="/login" className={navLinkClass}>
+              登入
+            </Link>
+          )
         ) : (
           <>
             <div className="hidden shrink-0 self-end sm:flex">

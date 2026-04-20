@@ -9,6 +9,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   if (localStorage.getItem("access_token")) {
@@ -74,9 +75,17 @@ function LoginPage() {
                   <label className="block text-sm font-medium text-slate-700">
                     密碼
                   </label>
+                  <label className="flex items-center gap-1 text-xs text-slate-600">
+                    <input
+                      type="checkbox"
+                      checked={showPassword}
+                      onChange={(e) => setShowPassword(e.target.checked)}
+                    />
+                    顯示密碼
+                  </label>
                 </div>
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
                   required
