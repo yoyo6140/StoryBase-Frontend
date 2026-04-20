@@ -1,13 +1,17 @@
 import { Input, Button } from "@/components/ui";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getMember } from "@/hooks/useMember";
 
 /** 新／確認密碼欄位至少字元數（搭配 HTML minLength） */
 const PASSWORD_MIN_LENGTH = 6;
 
 function MemberPage() {
+  const access_token = sessionStorage.getItem("auth_token");
   const [isEditing, setIsEditing] = useState(false);
   const [formKey, setFormKey] = useState(0);
   const [matchError, setMatchError] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
   const openPasswordEditor = () => {
     setMatchError("");
@@ -19,6 +23,15 @@ function MemberPage() {
     setMatchError("");
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    if (access_token) {
+      getMember({ access_token }).then((data) => {
+        setUsername(data.username);
+        setEmail(data.email);
+      });
+    }
+  }, [access_token]);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
@@ -36,7 +49,7 @@ function MemberPage() {
             >
               使用者名稱
             </label>
-            <div id="member-username">王大明</div>
+            <div id="member-username">{username}</div>
           </div>
           <div>
             <label
@@ -45,13 +58,17 @@ function MemberPage() {
             >
               電子郵件
             </label>
-            <div id="member-email">wang@example.com</div>
+            <div id="member-email">{email}</div>
           </div>
         </div>
 
         {!isEditing && (
           <div className="mt-6 flex items-center justify-end gap-2">
-            <Button type="button" variant="outline" onClick={openPasswordEditor}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={openPasswordEditor}
+            >
               修改密碼
             </Button>
           </div>
