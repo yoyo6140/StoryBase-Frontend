@@ -25,10 +25,10 @@ function PostsPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-zinc-900">貼文</h1>
-          <p className="mt-1 text-sm text-zinc-500">資料來自後端 API。</p>
+          {posts.length > 0 && `歡迎使用，${posts[0].author.username}`}
         </div>
         <Button variant="default" size="sm" asChild>
-          <Link to="/posts/new">新增貼文</Link>
+          <Link to="/posts/add">新增貼文</Link>
         </Button>
       </div>
 
@@ -49,9 +49,6 @@ function PostsPage() {
                   <h2 className="text-lg font-bold text-zinc-900">
                     {post.title}
                   </h2>
-                  <p className="mt-1 text-xs text-zinc-500">
-                    {post.author.username}
-                  </p>
                   <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-600">
                     {post.content}
                   </p>

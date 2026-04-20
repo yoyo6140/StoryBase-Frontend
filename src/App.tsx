@@ -17,7 +17,7 @@ function App() {
       <Route element={<AppLayout />}>
         <Route path="/member" element={<MemberPage />} />
         <Route path="/posts" element={<PostsPage />} />
-        <Route path="/posts/new" element={<PostAddPage />} />
+        <Route path="/posts/add" element={<PostAddPage />} />
         <Route path="/posts/:postId/edit" element={<PostsEditPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>
