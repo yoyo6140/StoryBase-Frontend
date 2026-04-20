@@ -57,21 +57,7 @@ function TopBar() {
           </nav>
         ) : null}
 
-        {isHomePage ? (
-          isLoggedIn ? (
-            <Link
-              to="/login"
-              className={mobileNavLinkClass}
-              onClick={clearAccessToken}
-            >
-              登出
-            </Link>
-          ) : (
-            <Link to="/login" className={navLinkClass}>
-              登入
-            </Link>
-          )
-        ) : (
+        {isLoggedIn ? (
           <>
             <div className="hidden shrink-0 self-end sm:flex">
               <Link
@@ -98,10 +84,14 @@ function TopBar() {
               )}
             </button>
           </>
-        )}
+        ) : isHomePage ? (
+          <Link to="/login" className={navLinkClass}>
+            登入
+          </Link>
+        ) : null}
       </div>
 
-      {!isHomePage && menuOpen ? (
+      {isLoggedIn && menuOpen ? (
         <div
           id="topbar-mobile-menu"
           className="border-t border-zinc-200 bg-white px-4 py-3 text-right sm:hidden"
