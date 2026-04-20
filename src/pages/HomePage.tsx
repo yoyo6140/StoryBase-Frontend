@@ -76,7 +76,7 @@ function HomePage() {
                   <h2 className="mt-2 line-clamp-2 break-words text-base font-bold text-zinc-900 sm:text-lg">
                     {post.title}
                   </h2>
-                  <p className="mt-3 line-clamp-3 break-words text-sm leading-relaxed text-zinc-600">
+                  <p className="mt-3 line-clamp-2 break-words text-sm leading-relaxed text-zinc-600">
                     {post.content}
                   </p>
                 </article>

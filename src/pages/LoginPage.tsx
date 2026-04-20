@@ -2,7 +2,7 @@ import { HouseTitleIcon } from "@/assets/icons";
 import bgLogin from "../assets/images/bg-login.jpg";
 import { Input, Button } from "@/components/ui";
 import { login } from "@/hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function LoginPage() {
@@ -10,6 +10,11 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  if (localStorage.getItem("access_token")) {
+    return <Navigate to="/member" replace />;
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (username === "" || password === "") {
