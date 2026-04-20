@@ -1,0 +1,60 @@
+# 將 Vite 建置結果發佈到 GitHub Pages（需在 Repo Settings → Pages 選擇 GitHub Actions）
+# 請先在 Settings → Secrets → Actions 新增 VITE_API_BASE_URL
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # 若網址為 https://<user>.github.io/<repo>/ ，請取消下一行註解，並註解掉「一般建置」那行
+      # - name: Build (GitHub 專案站，含 base path)
+      #   run: npm run build -- --base=/${{ github.event.repository.name }}/
+      #   env:
+      #     VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+      - name: Build
+        run: npm run build
+        env:
+          # Repository secret：名稱必須是 VITE_API_BASE_URL（若拼錯 Secret 名稱請一併修改此處）
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
