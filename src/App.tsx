@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import MemberPage from "./pages/MemberPage";
 import PostsPage from "./pages/PostsPage";
 import PostsEditPage from "./pages/PostsEditPage";
+import PostAddPage from "./pages/PostAddPage";
 import ErrorPage from "./pages/errorPage";
 
 function App() {
@@ -16,8 +17,8 @@ function App() {
       <Route element={<AppLayout />}>
         <Route path="/member" element={<MemberPage />} />
         <Route path="/posts" element={<PostsPage />} />
+        <Route path="/posts/new" element={<PostAddPage />} />
         <Route path="/posts/:postId/edit" element={<PostsEditPage />} />
-        <Route path="/posts/:postId" element={<PostsPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />

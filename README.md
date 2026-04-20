@@ -44,7 +44,7 @@ npm run dev
 
 - `src/pages/` — 各頁面（登入、註冊、會員、貼文列表／詳情／編輯、錯誤頁）
 - `src/components/` — 版面與 UI 元件
-- `src/hooks/useAuth.ts` — 登入／註冊 API 與 `sessionStorage` 存 token
+- `src/hooks/useAuth.ts` — 登入／註冊 API 與 `localStorage` 存 token
 - `src/data/samplePosts.ts` — 貼文列表／詳情目前使用的範例資料（可改為呼叫後端）
 
 路徑別名：`@/` 對應 `src/`（見 `vite.config.ts`）。
@@ -65,7 +65,7 @@ npm run dev
 ## 與後端整合
 
 - **登入**：`POST {VITE_API_BASE_URL}/api/v1/login`  
-  成功時將 `access_token` 寫入 `sessionStorage`（鍵名：`auth_token`）。
+  成功時將 `access_token` 寫入 `localStorage`（鍵名：`access_token`）。
 - **註冊**：`POST {VITE_API_BASE_URL}/api/v1/register`
 
 錯誤回應若為 JSON 且含 `detail`（例如 FastAPI），會當作錯誤訊息顯示於表單。
