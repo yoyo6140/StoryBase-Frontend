@@ -104,15 +104,23 @@ function LoginPage() {
                 </p>
               ) : null}
             </form>
-            <p className="mt-8 text-center text-sm text-slate-500">
-              還沒有帳號嗎？
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-sm">
               <Link
-                to="/register"
-                className="ml-1 font-bold text-indigo-600 hover:underline"
+                to="/homepage"
+                className="shrink-0 font-medium text-slate-600 transition-colors hover:text-indigo-600 hover:underline"
               >
-                免費註冊
+                回到首頁
               </Link>
-            </p>
+              <span className="text-slate-500">
+                還沒有帳號嗎？
+                <Link
+                  to="/register"
+                  className="ml-1 font-bold text-indigo-600 hover:underline"
+                >
+                  免費註冊
+                </Link>
+              </span>
+            </div>
           </div>
         </div>
       </div>
